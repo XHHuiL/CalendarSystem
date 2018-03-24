@@ -86,7 +86,7 @@ public class DateUtil {
      * Judge whether the input is formatted.
      * For example, 2018/2/1 is not valid and 2018-2-1 is valid.
      *
-     * @param dateString
+     * @param dateString require formatted date string
      * @return true if the input is formatted, false if the input is not formatted.
      */
     public static boolean isFormatted(String dateString) {
@@ -97,7 +97,7 @@ public class DateUtil {
      * Judge whether the input year is a leap year or not.
      * For example, year 2000 is a leap year, and 1900 is not.
      *
-     * @param year
+     * @param year a number used to represent a year
      * @return true if the input year is a leap year, false if the input is not.
      */
     public static boolean isLeapYear(int year) {

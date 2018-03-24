@@ -3,12 +3,12 @@
  * 1. A constructor that can return a CalendarDate object through the given string.
  * 2. A method named getDayOfWeek() that can get the index of a day in a week.
  */
-public class CalendarDate {
+class CalendarDate {
     private int year;
     private int month;
     private int day;
 
-    public CalendarDate(int year, int month, int day) {
+    CalendarDate(int year, int month, int day) {
         this.year = year;
         this.month = month;
         this.day = day;
@@ -19,7 +19,7 @@ public class CalendarDate {
      *
      * @param dateString format: 2018-3-18
      */
-    public CalendarDate(String dateString) throws NotFormattedDateStringException {
+    CalendarDate(String dateString) throws NotFormattedDateStringException {
         if (DateUtil.isFormatted(dateString)) {
             extractFormattedDateString(dateString);
         } else {
@@ -29,7 +29,7 @@ public class CalendarDate {
 
     /**
      * @param formattedDateString the formatted date string
-     *                            extract year, month and day from it
+     *                            extract the year,the month and the day from it
      */
     private void extractFormattedDateString(String formattedDateString) {
         String temp[] = formattedDateString.split("-");
@@ -66,17 +66,13 @@ public class CalendarDate {
         }
 
         // compute day of week
-        int index = (day + 2 * month + 3 * (month + 1) / 5 + year + year / 4 - year / 100 + year / 400) % 7 + 1;
+        int index = (day + 2 * month + 3 * (month + 1) / 5 +
+                year + year / 4 - year / 100 + year / 400) % 7 + 1;
 
         if (isJanuaryOrFebruary) {
             month -= 12;
             year++;
         }
         return index;
-    }
-
-    @Override
-    public String toString() {
-        return "year: " + year + " month: " + month + " day: " + day + " 星期: " + getDayOfWeek();
     }
 }

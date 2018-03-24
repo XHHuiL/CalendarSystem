@@ -25,7 +25,7 @@ public class Main extends Application {
         loader.setLocation(Main.class.getResource("Display.fxml"));
         Pane pane = loader.load();
         if (pane != null){
-            Display display = new Display(pane);
+            new Display(pane);
 
             primaryStage.setTitle("日历");
             primaryStage.setScene(new Scene(pane));

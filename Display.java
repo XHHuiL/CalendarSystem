@@ -1,5 +1,6 @@
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -7,7 +8,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-
 import java.util.List;
 
 /*
@@ -29,7 +29,6 @@ class Display {
 
     Display(Pane pane) {
         init(pane);
-        backToday();
     }
 
     /**
@@ -40,11 +39,11 @@ class Display {
         Button searchButton = (Button) pane.lookup("#searchButton");
         searchButton.setOnMouseClicked(event -> searchDate());
 
-        Button lookupButton = (Button) pane.lookup("#lookupButton");
-        lookupButton.setOnMouseClicked(event -> lookupDate());
+        Button queryButton = (Button) pane.lookup("#queryButton");
+        queryButton.setOnMouseClicked(event -> queryDate());
 
         Button todayButton = (Button) pane.lookup("#todayButton");
-        todayButton.setOnMouseClicked(event -> backToday());
+        todayButton.setOnMouseClicked(event -> today());
 
         // day buttons, search text field and choice boxes
         AnchorPane dayPane = (AnchorPane) pane.lookup("#dayPane");
@@ -53,8 +52,13 @@ class Display {
 
         yearChoiceBox = (ChoiceBox) pane.lookup("#yearChoiceBox");
         monthChoiceBox = (ChoiceBox) pane.lookup("#monthChoiceBox");
+
+        today();
     }
 
+    /*
+    * set the values of the year choice box
+    * */
     private void setYears(ChoiceBox<Integer> choiceBox, int y) {
         ObservableList<Integer> years = FXCollections.observableArrayList();
         for (int i = -10; i < 10; i++) {
@@ -64,6 +68,9 @@ class Display {
         choiceBox.setValue(y);
     }
 
+    /*
+    * set the values of month choice box
+    * */
     private void setMonths(ChoiceBox<Integer> choiceBox, int m) {
         ObservableList<Integer> months = FXCollections.observableArrayList();
         for (int i = 1; i <= 12; i++) {
@@ -73,6 +80,9 @@ class Display {
         choiceBox.setValue(m);
     }
 
+    /*
+    * show the date that is searched by the search text field
+    * */
     private void searchDate() {
         if (searchTextField != null) {
             String dateString = searchTextField.getText();
@@ -87,13 +97,19 @@ class Display {
         }
     }
 
-    private void lookupDate() {
+    /*
+    * show the date that is queried
+    * */
+    private void queryDate() {
         int y = (int) yearChoiceBox.getValue();
         int m = (int) monthChoiceBox.getValue();
         paintDays(new CalendarDate(y, m, 1));
     }
 
-    private void backToday() {
+    /*
+    * let the program show the date of today
+    * */
+    private void today() {
         CalendarDate today = DateUtil.getToday();
         paintDays(today);
     }
@@ -110,6 +126,7 @@ class Display {
             for (Node dayButton : dayButtons) {
                 ((Button) dayButton).setText("");
                 ((Button) dayButton).setTextFill(Color.BLACK);
+                dayButton.setStyle("-fx-border-color: #aaaaaa");
             }
 
             // paint
@@ -122,7 +139,11 @@ class Display {
             for (int i = firstIndex; i <= lastIndex; i++) {
                 ((Button) dayButtons.get(i)).setText(i - firstIndex + 1 + "");
             }
-            ((Button) dayButtons.get(highlightIndex)).setTextFill(Color.BLUE);
+
+            // highlight
+            Button highlightButton = ((Button) dayButtons.get(highlightIndex));
+            highlightButton.setTextFill(Color.BLUE);
+            highlightButton.setStyle("-fx-border-color: #0000ff");
 
             // set value of choice boxes
             setYears(yearChoiceBox, y);
