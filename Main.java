@@ -15,7 +15,5 @@ public class Main {
         * create a Display object
         * and show the calendar
         * */
-//        Display display = new Display();
-//        display.paintOnTerminal();
     }
 }

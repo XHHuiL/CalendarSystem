@@ -21,7 +21,4 @@ public class Display {
      */
     private void paintDays(CalendarDate date){}
 
-    void paintOnTerminal(){
-
-    }
 }
