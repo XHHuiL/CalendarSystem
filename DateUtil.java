@@ -54,18 +54,27 @@ public class DateUtil {
      * @param date the input date
      * @return true if the date is valid, false if the date is not valid.
      */
-    public static boolean isValid(CalendarDate date) {
+    private static boolean isValid(CalendarDate date) {
         if (date == null)
             return false;
         int m = date.getMonth();
         int d = date.getDay();
-        return m >= 1 && m <= 12 && d >= 28 && d <= 31 && d == numberOfDays(m, isLeapYear(date.getYear()));
+        boolean isLeap = isLeapYear(date.getYear());
+        if (m < 1 || m > 12)
+            return false;
+        if (d < 1)
+            return false;
+        if ((m % 2 == 1 && m < 8) || (m % 2 == 0 && m >= 8))
+            return d <= 31;
+        if ((m % 2 == 0 && m < 8 && m != 2) || (m % 2 == 1 && m >= 8))
+            return d <= 30;
+        return isLeap ? d <= 29 : d <= 28;
     }
 
     /*
      * get a month's number of days
      * */
-    private static int numberOfDays(int m, boolean isLeap) {
+    static int numberOfDays(int m, boolean isLeap) {
         if ((m % 2 == 1 && m < 8) || (m % 2 == 0 && m >= 8))
             return 31;
         if ((m % 2 == 0 && m < 8 && m != 2) || (m % 2 == 1 && m >= 8))
