@@ -9,6 +9,12 @@ import java.util.Calendar;
 import java.util.List;
 
 public class DateUtil {
+
+    /*
+    * can not construct a DateUtil object
+    * */
+    private DateUtil(){}
+
     /**
      * get a CalendarDate instance point to today
      * @return a CalendarDate object

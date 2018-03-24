@@ -10,5 +10,12 @@ public class Main {
         System.out.println(DateUtil.getCurrentDay());
         */
         //todo  We will run this class to test your codes.
+
+        /*
+        * create a Display object
+        * and show the calendar
+        * */
+//        Display display = new Display();
+//        display.paintOnTerminal();
     }
 }
