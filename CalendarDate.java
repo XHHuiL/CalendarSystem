@@ -19,11 +19,11 @@ class CalendarDate {
      *
      * @param dateString format: 2018-3-18
      */
-    CalendarDate(String dateString) throws NotFormattedDateStringException {
+    CalendarDate(String dateString) throws UnformattedDateStringException {
         if (DateUtil.isFormatted(dateString)) {
             extractFormattedDateString(dateString);
         } else {
-            throw new NotFormattedDateStringException("not formatted date string");
+            throw new UnformattedDateStringException("unformatted date string");
         }
     }
 
@@ -56,23 +56,27 @@ class CalendarDate {
      * Don't use the existing implement like Calendar.setTime(),
      * try to implement your own algorithm.
      *
-     * @return 1-7, 1 stands for Monday and 7 stands for Sunday
+     * @return 0-7, 0 stands for a invalid date, 1 stands for Monday
+     *          and 7 stands for Sunday
      */
     public int getDayOfWeek() {
-        boolean isJanuaryOrFebruary = month == 1 || month == 2;
-        if (isJanuaryOrFebruary) {
-            month += 12;
-            year--;
-        }
+        if (DateUtil.isValid(this)) {
+            boolean isJanuaryOrFebruary = month == 1 || month == 2;
+            if (isJanuaryOrFebruary) {
+                month += 12;
+                year--;
+            }
 
-        // compute day of week
-        int index = (day + 2 * month + 3 * (month + 1) / 5 +
-                year + year / 4 - year / 100 + year / 400) % 7 + 1;
+            // compute day of week
+            int index = (day + 2 * month + 3 * (month + 1) / 5 +
+                    year + year / 4 - year / 100 + year / 400) % 7 + 1;
 
-        if (isJanuaryOrFebruary) {
-            month -= 12;
-            year++;
-        }
-        return index;
+            if (isJanuaryOrFebruary) {
+                month -= 12;
+                year++;
+            }
+            return index;
+        } else
+            return 0;
     }
 }

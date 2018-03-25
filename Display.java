@@ -1,13 +1,14 @@
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+
 import java.util.List;
 
 /*
@@ -27,6 +28,8 @@ class Display {
 
     private ChoiceBox monthChoiceBox;
 
+    private Label hintLabel;
+
     Display(Pane pane) {
         init(pane);
     }
@@ -45,10 +48,11 @@ class Display {
         Button todayButton = (Button) pane.lookup("#todayButton");
         todayButton.setOnMouseClicked(event -> today());
 
-        // day buttons, search text field and choice boxes
+        // day buttons, search text field, hint label and choice boxes
         AnchorPane dayPane = (AnchorPane) pane.lookup("#dayPane");
         dayButtons = dayPane.getChildren();
         searchTextField = (TextField) pane.lookup("#searchTextField");
+        hintLabel = (Label) pane.lookup("#hintLabel");
 
         yearChoiceBox = (ChoiceBox) pane.lookup("#yearChoiceBox");
         monthChoiceBox = (ChoiceBox) pane.lookup("#monthChoiceBox");
@@ -57,8 +61,8 @@ class Display {
     }
 
     /*
-    * set the values of the year choice box
-    * */
+     * set the values of the year choice box
+     * */
     private void setYears(ChoiceBox<Integer> choiceBox, int y) {
         ObservableList<Integer> years = FXCollections.observableArrayList();
         for (int i = -10; i < 10; i++) {
@@ -69,8 +73,8 @@ class Display {
     }
 
     /*
-    * set the values of month choice box
-    * */
+     * set the values of month choice box
+     * */
     private void setMonths(ChoiceBox<Integer> choiceBox, int m) {
         ObservableList<Integer> months = FXCollections.observableArrayList();
         for (int i = 1; i <= 12; i++) {
@@ -80,26 +84,44 @@ class Display {
         choiceBox.setValue(m);
     }
 
-    /*
-    * show the date that is searched by the search text field
-    * */
-    private void searchDate() {
-        if (searchTextField != null) {
-            String dateString = searchTextField.getText();
-            if (dateString != null) {
-                try {
-                    CalendarDate date = new CalendarDate(dateString);
-                    paintDays(date);
-                } catch (NotFormattedDateStringException e) {
-                    System.out.println("Warning:not formatted date string\nUsage: YYYY-[M]M-[D]D");
-                }
-            }
+    private void showHintLabel(String hint) {
+        hintLabel.setText(hint);
+        hintLabel.setVisible(true);
+        switch (hint) {
+            case "Invalid":
+                System.out.println("Warning: invalid date string");
+                break;
+            case "Unformatted":
+                System.out.println("Warning:unformatted date string\nUsage: YYYY-[M]M-[D]D");
+                break;
+            case "Empty":
+                System.out.println("Warning: empty date string");
+                break;
         }
     }
 
     /*
-    * show the date that is queried
-    * */
+     * show the date that is searched by the search text field
+     * */
+    private void searchDate() {
+        if (searchTextField != null) {
+            String dateString = searchTextField.getText();
+            if (dateString.length() != 0) {
+                try {
+                    CalendarDate date = new CalendarDate(dateString);
+                    if (!paintDays(date))
+                        showHintLabel("Invalid");
+                } catch (UnformattedDateStringException e) {
+                    showHintLabel("Unformatted");
+                }
+            } else
+                showHintLabel("Empty");
+        }
+    }
+
+    /*
+     * show the date that is queried
+     * */
     private void queryDate() {
         int y = (int) yearChoiceBox.getValue();
         int m = (int) monthChoiceBox.getValue();
@@ -107,8 +129,8 @@ class Display {
     }
 
     /*
-    * let the program show the date of today
-    * */
+     * let the program show the date of today
+     * */
     private void today() {
         CalendarDate today = DateUtil.getToday();
         paintDays(today);
@@ -119,7 +141,7 @@ class Display {
      *
      * @param date a valid CalendarDate param.
      */
-    private void paintDays(CalendarDate date) {
+    private boolean paintDays(CalendarDate date) {
         List<CalendarDate> days = DateUtil.getDaysInMonth(date);
         if (days != null) {
             // empty
@@ -145,9 +167,12 @@ class Display {
             highlightButton.setTextFill(Color.BLUE);
             highlightButton.setStyle("-fx-border-color: #0000ff");
 
-            // set value of choice boxes
+            // set value of choice boxes and hide hint label
             setYears(yearChoiceBox, y);
             setMonths(monthChoiceBox, m);
-        }
+            hintLabel.setVisible(false);
+            return true;
+        } else
+            return false;
     }
 }

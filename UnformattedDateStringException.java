@@ -2,9 +2,9 @@
  * customize an exception class
  * a string that represents a non formatted date string
  * */
-class NotFormattedDateStringException extends Exception {
+class UnformattedDateStringException extends Exception {
 
-    NotFormattedDateStringException(String message) {
+    UnformattedDateStringException(String message) {
         super(message);
     }
 

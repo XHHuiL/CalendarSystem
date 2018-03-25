@@ -27,7 +27,7 @@ public class Main extends Application {
         if (pane != null){
             new Display(pane);
 
-            primaryStage.setTitle("日历");
+            primaryStage.setTitle("Calendar");
             primaryStage.setScene(new Scene(pane));
             primaryStage.show();
         }

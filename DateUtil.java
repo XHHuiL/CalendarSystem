@@ -35,8 +35,8 @@ public class DateUtil {
      * @param date the given date
      * @return a list of days in a whole month
      */
-    public static List<CalendarDate> getDaysInMonth(CalendarDate date) {
-        if (date != null && isValid(date)) {
+    public static List<CalendarDate> getDaysInMonth(CalendarDate date){
+        if (isValid(date)) {
             int y = date.getYear();
             int m = date.getMonth();
             int num = numberOfDays(m, isLeapYear(y));
@@ -54,7 +54,7 @@ public class DateUtil {
      * @param date the input date
      * @return true if the date is valid, false if the date is not valid.
      */
-    private static boolean isValid(CalendarDate date) {
+    static boolean isValid(CalendarDate date) {
         if (date == null)
             return false;
         int m = date.getMonth();
@@ -87,7 +87,7 @@ public class DateUtil {
      * For example, 2018/2/1 is not valid and 2018-2-1 is valid.
      *
      * @param dateString require formatted date string
-     * @return true if the input is formatted, false if the input is not formatted.
+     * @return true if the input is formatted, false if the input is unformatted.
      */
     public static boolean isFormatted(String dateString) {
         return dateString.matches("^\\d{4}-\\d{1,2}-\\d{1,2}$");
