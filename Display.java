@@ -66,7 +66,8 @@ class Display {
     /*
      * set the values of the year choice box
      * */
-    private void setYears(ChoiceBox<Integer> choiceBox, int y) {
+    @SuppressWarnings("unchecked")
+    private void setYears(ChoiceBox choiceBox, int y) {
         ObservableList<Integer> years = FXCollections.observableArrayList();
         for (int i = -10; i < 10; i++) {
             years.add(y + i);
@@ -78,7 +79,8 @@ class Display {
     /*
      * set the values of month choice box
      * */
-    private void setMonths(ChoiceBox<Integer> choiceBox, int m) {
+    @SuppressWarnings("unchecked")
+    private void setMonths(ChoiceBox choiceBox, int m) {
         ObservableList<Integer> months = FXCollections.observableArrayList();
         for (int i = 1; i <= 12; i++) {
             months.add(i);
