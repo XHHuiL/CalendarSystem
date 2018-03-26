@@ -10,6 +10,14 @@ import javafx.stage.StageStyle;
  *
  * */
 public class Main extends Application {
+    /*
+    * variables used to implement a movable window
+    * */
+    private double mouseX;
+    private double mouseY;
+    private double stageX;
+    private double stageY;
+
     public static void main(String[] args) {
         /*
         System.out.println(DateUtil.getCurrentYear());
@@ -26,11 +34,22 @@ public class Main extends Application {
         loader.setLocation(Main.class.getResource("Display.fxml"));
         Pane pane = loader.load();
         if (pane != null){
+            // get the scene and implement movable window
             new Display(pane);
             Scene scene = new Scene(pane);
             scene.getStylesheets().add(getClass().getResource("DarkStyle.css").toExternalForm());
+            scene.setOnMousePressed(event -> {
+                mouseX = event.getScreenX();
+                mouseY = event.getScreenY();
+                stageX = primaryStage.getX();
+                stageY = primaryStage.getY();
+            });
+            scene.setOnMouseDragged(event -> {
+                primaryStage.setX(stageX + event.getScreenX() - mouseX);
+                primaryStage.setY(stageY + event.getScreenY() - mouseY);
+            });
 
-            // set something necessary
+            // set something necessary about stage
             primaryStage.initStyle(StageStyle.UNDECORATED);
             primaryStage.setResizable(false);
             primaryStage.setScene(scene);
