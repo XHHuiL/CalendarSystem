@@ -26,9 +26,9 @@ public class Main extends Application {
         Pane pane = loader.load();
         if (pane != null){
             new Display(pane);
-
             primaryStage.setTitle("Calendar");
-            primaryStage.setScene(new Scene(pane));
+            Scene scene = new Scene(pane);
+            primaryStage.setScene(scene);
             primaryStage.show();
         }
     }
