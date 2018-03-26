@@ -3,6 +3,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /*
  * Start here!
@@ -26,8 +27,12 @@ public class Main extends Application {
         Pane pane = loader.load();
         if (pane != null){
             new Display(pane);
-            primaryStage.setTitle("Calendar");
             Scene scene = new Scene(pane);
+            scene.getStylesheets().add(getClass().getResource("DarkStyle.css").toExternalForm());
+
+            // set something necessary
+            primaryStage.initStyle(StageStyle.UNDECORATED);
+            primaryStage.setResizable(false);
             primaryStage.setScene(scene);
             primaryStage.show();
         }

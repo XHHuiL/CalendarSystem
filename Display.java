@@ -30,6 +30,8 @@ class Display {
 
     private Label hintLabel;
 
+    private int highlightIndex;
+
     Display(Pane pane) {
         init(pane);
     }
@@ -47,6 +49,9 @@ class Display {
 
         Button todayButton = (Button) pane.lookup("#todayButton");
         todayButton.setOnMouseClicked(event -> today());
+
+        // quit
+        pane.lookup("#quitButton").setOnMouseClicked(event -> System.exit(0));
 
         // day buttons, search text field, hint label and choice boxes
         AnchorPane dayPane = (AnchorPane) pane.lookup("#dayPane");
@@ -147,9 +152,9 @@ class Display {
             // empty
             for (Node dayButton : dayButtons) {
                 ((Button) dayButton).setText("");
-                ((Button) dayButton).setTextFill(Color.BLACK);
-                dayButton.setStyle("-fx-border-color: #aaaaaa");
+                dayButton.getStyleClass().remove("valued");
             }
+            dayButtons.get(highlightIndex).getStyleClass().remove("highlight");
 
             // paint
             int y = date.getYear();
@@ -157,15 +162,15 @@ class Display {
             int num = DateUtil.numberOfDays(m, DateUtil.isLeapYear(y));
             int firstIndex = days.get(0).getDayOfWeek() % 7;
             int lastIndex = firstIndex + num - 1;
-            int highlightIndex = firstIndex + date.getDay() - 1;
+            highlightIndex = firstIndex + date.getDay() - 1;
             for (int i = firstIndex; i <= lastIndex; i++) {
                 ((Button) dayButtons.get(i)).setText(i - firstIndex + 1 + "");
+                dayButtons.get(i).getStyleClass().add("valued");
             }
 
             // highlight
             Button highlightButton = ((Button) dayButtons.get(highlightIndex));
-            highlightButton.setTextFill(Color.BLUE);
-            highlightButton.setStyle("-fx-border-color: #0000ff");
+            highlightButton.getStyleClass().add("highlight");
 
             // set value of choice boxes and hide hint label
             setYears(yearChoiceBox, y);

@@ -1,0 +1,36 @@
+#root{
+    -fx-background-color: #333333;
+}
+
+#searchTextField {
+    -fx-text-fill: #333333;
+}
+
+.choice-box .label{
+    -fx-text-fill: #bbbbbb;
+}
+
+#searchButton:hover, #queryButton:hover,
+#todayButton:hover, #quitButton:hover{
+    -fx-text-fill: #ffffff;
+}
+
+.choice-box, .button, .yearLabel, .monthLabel{
+    -fx-text-fill: #bbbbbb;
+    -fx-background-color: #333333;
+    -fx-border-color: #333333;
+}
+
+#dayPane .valued:hover{
+    -fx-text-fill: #bbbbbb;
+    -fx-border-color: #dddddd;
+    -fx-border-radius: 1;
+    -fx-border-width: 1;
+}
+
+#dayPane .highlight{
+    -fx-text-fill: #2583ff;
+    -fx-border-color: #2583ff;
+    -fx-border-radius: 1;
+    -fx-border-width: 1;
+}
