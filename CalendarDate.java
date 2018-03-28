@@ -32,7 +32,7 @@ class CalendarDate {
      *                            extract the year,the month and the day from it
      */
     private void extractFormattedDateString(String formattedDateString) {
-        String temp[] = formattedDateString.split("-");
+        String[] temp = formattedDateString.split("-");
         this.year = Integer.parseInt(temp[0]);
         this.month = Integer.parseInt(temp[1]);
         this.day = Integer.parseInt(temp[2]);

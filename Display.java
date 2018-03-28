@@ -72,8 +72,10 @@ class Display {
         for (int i = -10; i < 10; i++) {
             years.add(y + i);
         }
-        choiceBox.setItems(years);
-        choiceBox.setValue(y);
+        if (choiceBox != null) {
+            choiceBox.setItems(years);
+            choiceBox.setValue(y);
+        }
     }
 
     /*
@@ -85,23 +87,29 @@ class Display {
         for (int i = 1; i <= 12; i++) {
             months.add(i);
         }
-        choiceBox.setItems(months);
-        choiceBox.setValue(m);
+        if (choiceBox != null) {
+            choiceBox.setItems(months);
+            choiceBox.setValue(m);
+        }
     }
 
     private void showHintLabel(String hint) {
-        hintLabel.setText(hint);
-        hintLabel.setVisible(true);
-        switch (hint) {
-            case "Invalid":
-                System.out.println("Warning: invalid date string");
-                break;
-            case "Unformatted":
-                System.out.println("Warning:unformatted date string\nUsage: YYYY-[M]M-[D]D");
-                break;
-            case "Empty":
-                System.out.println("Warning: empty date string");
-                break;
+        if (hintLabel != null) {
+            hintLabel.setText(hint);
+            hintLabel.setVisible(true);
+            switch (hint) {
+                case "Invalid":
+                    System.out.println("Warning: invalid date string");
+                    break;
+                case "Unformatted":
+                    System.out.println("Warning:unformatted date string\nUsage: YYYY-[M]M-[D]D");
+                    break;
+                case "Empty":
+                    System.out.println("Warning: empty date string");
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -128,9 +136,11 @@ class Display {
      * show the date that is queried
      * */
     private void queryDate() {
-        int y = (int) yearChoiceBox.getValue();
-        int m = (int) monthChoiceBox.getValue();
-        paintDays(new CalendarDate(y, m, 1));
+        if (yearChoiceBox != null && monthChoiceBox != null) {
+            int y = (int) yearChoiceBox.getValue();
+            int m = (int) monthChoiceBox.getValue();
+            paintDays(new CalendarDate(y, m, 1));
+        }
     }
 
     /*
@@ -141,6 +151,45 @@ class Display {
         paintDays(today);
     }
 
+    /*
+    * empty the day buttons
+    * */
+    private void emptyDayButtons(){
+        for (Node dayButton : dayButtons) {
+            ((Button) dayButton).setText("");
+            dayButton.getStyleClass().remove("valued");
+        }
+        dayButtons.get(highlightIndex).getStyleClass().remove("highlight");
+    }
+
+    /*
+    * the specific paint operation
+    * */
+    private void paint(CalendarDate date, List<CalendarDate> days){
+        int y = date.getYear();
+        int m = date.getMonth();
+        int num = DateUtil.numberOfDays(m, DateUtil.isLeapYear(y));
+        int firstIndex = days.get(0).getDayOfWeek() % 7;
+        int lastIndex = firstIndex + num - 1;
+        highlightIndex = firstIndex + date.getDay() - 1;
+        for (int i = firstIndex; i <= lastIndex; i++) {
+            ((Button) dayButtons.get(i)).setText(i - firstIndex + 1 + "");
+            dayButtons.get(i).getStyleClass().add("valued");
+        }
+
+        // set value of choice boxes, hide hint label and highlight
+        setYears(yearChoiceBox, y);
+        setMonths(monthChoiceBox, m);
+        hintLabel.setVisible(false);
+        highlight();
+    }
+
+    private void highlight(){
+        // highlight
+        Button highlightButton = ((Button) dayButtons.get(highlightIndex));
+        highlightButton.getStyleClass().add("highlight");
+    }
+
     /**
      * paint the days of whole current month on the frame with the given CalendarDate
      *
@@ -149,33 +198,8 @@ class Display {
     private boolean paintDays(CalendarDate date) {
         List<CalendarDate> days = DateUtil.getDaysInMonth(date);
         if (days != null) {
-            // empty
-            for (Node dayButton : dayButtons) {
-                ((Button) dayButton).setText("");
-                dayButton.getStyleClass().remove("valued");
-            }
-            dayButtons.get(highlightIndex).getStyleClass().remove("highlight");
-
-            // paint
-            int y = date.getYear();
-            int m = date.getMonth();
-            int num = DateUtil.numberOfDays(m, DateUtil.isLeapYear(y));
-            int firstIndex = days.get(0).getDayOfWeek() % 7;
-            int lastIndex = firstIndex + num - 1;
-            highlightIndex = firstIndex + date.getDay() - 1;
-            for (int i = firstIndex; i <= lastIndex; i++) {
-                ((Button) dayButtons.get(i)).setText(i - firstIndex + 1 + "");
-                dayButtons.get(i).getStyleClass().add("valued");
-            }
-
-            // highlight
-            Button highlightButton = ((Button) dayButtons.get(highlightIndex));
-            highlightButton.getStyleClass().add("highlight");
-
-            // set value of choice boxes and hide hint label
-            setYears(yearChoiceBox, y);
-            setMonths(monthChoiceBox, m);
-            hintLabel.setVisible(false);
+            emptyDayButtons();
+            paint(date, days);
             return true;
         } else
             return false;

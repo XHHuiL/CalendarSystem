@@ -4,6 +4,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import java.io.File;
 
 /*
  * Start here!
@@ -11,33 +12,37 @@ import javafx.stage.StageStyle;
  * */
 public class Main extends Application {
     /*
-    * variables used to implement a movable window
-    * */
+     * variables used to implement a movable window
+     * */
     private double mouseX;
     private double mouseY;
     private double stageX;
     private double stageY;
 
+    private static final String DISPLAY_FXML = "Display.fxml";
+    private static final String DARK_STYLE_CSS = "DarkStyle.css";
+
     public static void main(String[] args) {
-        /*
-        System.out.println(DateUtil.getCurrentYear());
-        System.out.println(DateUtil.getCurrentMonth());
-        System.out.println(DateUtil.getCurrentDay());
-        */
-        //todo  We will run this class to test your codes.
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("Display.fxml"));
+        if (!sourceFileExists(DISPLAY_FXML)) {
+            System.out.println("Error: Display.fxml is not found");
+            System.exit(1);
+        }
+        loader.setLocation(Main.class.getResource(DISPLAY_FXML));
         Pane pane = loader.load();
-        if (pane != null){
+        if (pane != null) {
             // get the scene and implement movable window
             new Display(pane);
             Scene scene = new Scene(pane);
-            scene.getStylesheets().add(getClass().getResource("DarkStyle.css").toExternalForm());
+            if (sourceFileExists(DARK_STYLE_CSS))
+                scene.getStylesheets().add(getClass().getResource(DARK_STYLE_CSS).toExternalForm());
+            else
+                System.out.println("Waring: DarkStyle.css is not found");
             scene.setOnMousePressed(event -> {
                 mouseX = event.getScreenX();
                 mouseY = event.getScreenY();
@@ -55,5 +60,9 @@ public class Main extends Application {
             primaryStage.setScene(scene);
             primaryStage.show();
         }
+    }
+
+    private boolean sourceFileExists(String path) {
+        return new File(path).exists();
     }
 }
