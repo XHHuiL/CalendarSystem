@@ -35,7 +35,7 @@ public class DateUtil {
      * @param date the given date
      * @return a list of days in a whole month
      */
-    public static List<CalendarDate> getDaysInMonth(CalendarDate date){
+    public static List<CalendarDate> getDaysInMonth(CalendarDate date) {
         if (isValid(date)) {
             int y = date.getYear();
             int m = date.getMonth();
@@ -90,7 +90,7 @@ public class DateUtil {
      * @return true if the input is formatted, false if the input is unformatted.
      */
     public static boolean isFormatted(String dateString) {
-        return dateString.matches("^\\d{4}-\\d{1,2}-\\d{1,2}$");
+        return dateString != null && dateString.matches("^\\d{4}-\\d{1,2}-\\d{1,2}$");
     }
 
     /**
