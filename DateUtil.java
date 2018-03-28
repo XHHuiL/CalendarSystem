@@ -60,15 +60,7 @@ public class DateUtil {
         int m = date.getMonth();
         int d = date.getDay();
         boolean isLeap = isLeapYear(date.getYear());
-        if (m < 1 || m > 12)
-            return false;
-        if (d < 1)
-            return false;
-        if ((m % 2 == 1 && m < 8) || (m % 2 == 0 && m >= 8))
-            return d <= 31;
-        if ((m % 2 == 0 && m < 8 && m != 2) || (m % 2 == 1 && m >= 8))
-            return d <= 30;
-        return isLeap ? d <= 29 : d <= 28;
+        return m >= 1 && m <= 12 && d >= 1 && d <= numberOfDays(m, isLeap);
     }
 
     /*
